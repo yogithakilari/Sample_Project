@@ -1,0 +1,53 @@
+
+<p style="color: green"><%= notice %></p>
+
+<%= render @post %>
+
+<div>
+  <%= link_to "Back to posts", posts_path %>
+</div>
+
+<hr>
+
+<h2>Comments</h2>
+
+<% @post.comments.each do |comment| %>
+  <div>
+    <p><%= comment.text %></p>
+    <p>By: <%= comment.user.email %></p>
+
+    <% if user_signed_in? && comment.user == current_user %>
+      <%= link_to "Edit", edit_comment_path(comment) %>
+
+      <%= button_to "Delete",
+                    comment_path(comment),
+                    method: :delete,
+                    data: { turbo_confirm: "Are you sure?" } %>
+    <% end %>
+  </div>
+  <hr>
+<% end %>
+
+<% if user_signed_in? %>
+  <h3>Add a comment</h3>
+
+  <%= form_with model: Comment.new, url: comments_path do |form| %>
+    <%= form.hidden_field :post_id, value: @post.id %>
+
+    <div>
+      <%= form.label :text, "Your comment" %>
+      <%= form.text_area :text, required: true %>
+    </div>
+
+    <div>
+      <%= form.submit "Add Comment" %>
+    </div>
+  <% end %>
+<% else %>
+  <p>
+    <%= link_to "Sign in", new_user_session_path %>
+    or
+    <%= link_to "Sign up", new_user_registration_path %>
+    to add a comment.
+  </p>
+<% end %>
