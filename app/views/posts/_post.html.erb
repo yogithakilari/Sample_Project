@@ -1,3 +1,4 @@
+
 <div id="<%= dom_id post %>">
   <p>
     <strong>Title:</strong>
@@ -9,4 +10,14 @@
     <%= post.content %>
   </p>
 
+  <p>
+    <strong>Tags:</strong>
+    <% if post.tags.any? %>
+      <% post.tags.each do |tag| %>
+        <span><%= tag.name %></span>
+      <% end %>
+    <% else %>
+      No tags added
+    <% end %>
+  </p>
 </div>
